@@ -5,8 +5,12 @@
 
 class Post : public QString
 {
-public:
-  Post();
+  public:
+    Post(QString a, int id = 0, QString table = QString());
+
+  private:
+    int id;
+    QString table;
 };
 
 #endif // POST_H
