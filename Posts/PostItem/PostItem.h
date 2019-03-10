@@ -1,15 +1,23 @@
 #ifndef POSTITEM_H
 #define POSTITEM_H
 
-#include "../../Model/AbstractPostItem.h"
+//#include "BaseItem.h"
+//#include "../Site/Site.h"
+
+//#include <QStyledItemDelegate>
+#include "AbstractPostItem.h"
 
 class PostItem : public AbstractPostItem
+               /*public BaseItem,
+                 public Site*/
 {
   public:
+//    PostItem(const Site* site, QString stId, QString stCtx, QString stShortCtx, QString stClass, QString title, QString img = "");
     PostItem(const Site* site, QJsonObject item);
 
     int columnCount() const;
     QVariant data(int column) const;
+    QVariant getShortData(int column) const;
     bool setData(int column, const QVariant &value);
 
     QString getHtml();
@@ -46,11 +54,6 @@ class PostItem : public AbstractPostItem
             stTitle,
             img;
     QString type = "default";
-
-  private slots:
-    void chageStClass(const QString &text);
 };
-
-AbstractPostItem* createPostItem(Site* site,QJsonObject item = QJsonObject());
 
 #endif // POSTITEM_H

@@ -1,12 +1,13 @@
-#include "PostItem.h"
-#include "../PostEdit/PostWindow.h"
+#include "PostPics.h"
+#include "../PostPicsEdit/PostPicsEdit.h"
 #include "../Site/Site.h"
 
 #include "../PageEdit/PageEdit.h"
 
 #include <QPair>
+#include <QDebug>
 
-PostItem::PostItem(const Site *site, QJsonObject item)
+PostPics::PostPics(const Site *site, QJsonObject item)
   : AbstractPostItem(site, item),
     stId(item["id"].toString("")),
     stCtx(item["ctx"].toString("")),
@@ -15,15 +16,23 @@ PostItem::PostItem(const Site *site, QJsonObject item)
     stTitle(item["title"].toString("")),
     img(item["img"].toString(""))
 {
+  QJsonArray picArr = item["imgs"].toArray();
+  for (int i = 0; i < picArr.size(); i++)
+    {
+      pics.append(picArr[i].toString());
+    }
+
+  qInfo() << __LINE__ << picArr;
+  qInfo() << __LINE__ << pics;
   self = this;
 }
 
-int PostItem::columnCount() const
+int PostPics::columnCount() const
 {
   return 0;
 }
 
-QVariant PostItem::data(int column) const
+QVariant PostPics::data(int column) const
 {
   switch (column) {
     case 0: return stId;
@@ -40,7 +49,7 @@ QVariant PostItem::data(int column) const
   }
 }
 
-QVariant PostItem::getShortData(int column) const
+QVariant PostPics::getShortData(int column) const
 {
   switch (column) {
     case 0: return stId;
@@ -54,7 +63,7 @@ QVariant PostItem::getShortData(int column) const
 }
 
 
-bool PostItem::setData(int column, const QVariant &value)
+bool PostPics::setData(int column, const QVariant &value)
 {
   switch (column) {
     case 0: stId = value.toString(); return true;
@@ -64,7 +73,7 @@ bool PostItem::setData(int column, const QVariant &value)
   }
 }
 
-QString PostItem::getHtml()
+QString PostPics::getHtml()
 {
   QString tpl_html, html;
 
@@ -80,82 +89,58 @@ QString PostItem::getHtml()
   return html;
 }
 
-QString PostItem::getBody()
-{
-  return stCtx;
-}
+QString PostPics::getBody() { return stCtx; }
+QString PostPics::getShortCtx() const { return stShortCtx; }
+QString PostPics::getClass() const { return stClass; }
+QString PostPics::getId() const { return stId; }
+QString PostPics::getImg() const { return img; }
+QString PostPics::getTitle() const { return stTitle; }
 
-QString PostItem::getShortCtx() const
-{
-  return stShortCtx;
-}
-QString PostItem::getClass() const
-{
-  return stClass;
-}
-QString PostItem::getId() const
-{
-  return stId;
-}
+void PostPics::setCtx(QString str) {stCtx = str;}
+void PostPics::setShortCtx(QString str) {stShortCtx = str;}
+void PostPics::setClass(QString str) {stClass = str;}
+void PostPics::setId(QString str) {stId = str;}
+void PostPics::setImg(QString str) {img = str;}
 
-QString PostItem::getImg() const
-{
-  return img;
-}
-
-QString PostItem::getTitle() const
-{
-  return stTitle;
-}
-
-void PostItem::setCtx(QString str) {stCtx = str;}
-void PostItem::setShortCtx(QString str) {stShortCtx = str;}
-void PostItem::setClass(QString str) {stClass = str;}
-void PostItem::setId(QString str) {stId = str;}
-void PostItem::setImg(QString str) {img = str;}
-
-void PostItem::setTitle(QString title)
+void PostPics::setTitle(QString title)
 {
   stTitle = title;
 }
 
 #include <QDebug>
-QWidget *PostItem::createEditor(const QModelIndex &, int column)
+QWidget *PostPics::createEditor(const QModelIndex &, int column)
 {
-  qInfo() << "QWidget *PostItem::createEditor(const QModelIndex &, int column)";
-  if (column == 3)
-    {
-      const QStringList classes = getClasses();
-
-      PostWindow *postWindow = new PostWindow(self, self, classes);
-      return postWindow;
-    }
+//  qInfo() << "QWidget *PostPics::createEditor(const QModelIndex &, int column)";
+//  if (column == 3)
+//    {
+//      PostPicsEdit *edit = new PostPicsEdit(this, pics);
+//      return edit;
+//    }
 
 
   return new QWidget();
 }
 
-QWidget *PostItem::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *PostPics::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
   int column = index.column();
   if (column == 3)
     {
-      const QStringList classes = getClasses();
-
-      PostWindow *postWindow = new PostWindow(self, self, classes);
-      return postWindow;
+      const Site* site = dynamic_cast<const Site*>(this);
+      PostPicsEdit *edit = new PostPicsEdit(site, pics);
+      return edit;
     }
 
   return new QWidget;
 
 }
 
-void PostItem::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void PostPics::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 
 }
 
-QJsonObject PostItem::json()
+QJsonObject PostPics::json()
 {
   QJsonObject data;
   data["id"] = stId;

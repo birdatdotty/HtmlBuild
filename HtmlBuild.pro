@@ -26,20 +26,10 @@ CONFIG += c++11
 
 SOURCES += \
         main.cc \
-        HtmlBuild.cc \
-    Db.cc
+        HtmlBuild.cc
 
 HEADERS += \
-        HtmlBuild.h \
-    Db.h \
-    config.h
-
-include (Model/Model.pri)
-include (Delegate/Delegate.pri)
-include (PageEdit/PageEdit.pri)
-include (Site/Site.pri)
-include (Posts/Posts.pri)
-
+        HtmlBuild.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
