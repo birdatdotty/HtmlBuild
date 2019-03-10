@@ -36,6 +36,9 @@ void PostPicsEdit::addImg()
   QString newFile = QFileDialog::getOpenFileName(this,
                                                  tr("Картинки"), dirImg,
                                                  tr("картинки (*.png *.jpeg *.jpg)"));
+  if (newFile.size() == 0)
+    return;
+
   newFile = newFile.split(dir)[1];
   AddImg* addImg = new AddImg(newFile, this);
   imgs.append(addImg);
