@@ -1,7 +1,8 @@
 #include "BaseItem.h"
 
+#include <QApplication>
 #include <QPainter>
-//#include "PostItem.h"
+#include <QApplication>
 
 BaseItem::BaseItem()
 {
@@ -52,25 +53,38 @@ QJsonObject BaseItem::json()
   return QJsonObject();
 }
 
-#include <QDebug>
-#include <QTime>
 void BaseItem::draw(QPainter *painter, const QStyleOptionViewItem &option, QString text) const
 {
-  painter->save();
   bool sel = option.state & QStyle::State_Selected;
-  if (sel)
-    painter->fillRect(option.rect, option.palette.highlight());
 
-//  int s = QTime::msec();;
-  qInfo() << __LINE__ << text << option.rect;
-//  painter->setPen(Qt::darkGray);
-  if (!sel) {
-      QPen pen(Qt::green);
-//      pen.setWidth(2);
-//      painter->setPen(pen);
-  }
-  painter->drawText(option.rect, text);
+  painter->save();
+  if (sel)
+    {
+      painter->fillRect(option.rect, option.palette.highlight());
+      painter->setPen(Qt::white);
+      painter->drawText(option.rect, text);
+    }
+  else
+      painter->drawText(option.rect, text);
 
   painter->restore();
 
+}
+
+void BaseItem::drawButton(QPainter *painter, const QStyleOptionViewItem &option, QString text) const
+{
+  QStyleOptionButton button;
+
+  QRect r = option.rect;
+  int x,y,w,h;
+  w = r.width() - 2;
+  h = r.height() - 2;
+  x = r.left() + 1;
+  y = r.top() - 1;
+
+  button.rect = QRect(x,y,w,h);
+  button.text = text;
+  button.state = QStyle::State_Enabled;
+
+  QApplication::style()->drawControl( QStyle::CE_PushButton, &button, painter);
 }

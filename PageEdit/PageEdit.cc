@@ -89,8 +89,10 @@ void PageEdit::clkAddPost()
 //  model->newPost(curRow, pageItem, post);
 
   QJsonObject postData;
+  model->startUpdate(pageItem, curRow);
   postData["type"] = selectPost->currentText();
   buildPost(pageItem, postData);
+  model->endUpdate();
 
 
   close();

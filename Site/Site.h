@@ -21,16 +21,18 @@ class Site
 {
   public:
     Site(QString dir);
-    Site(Site*);
     Site(const Site*);
 
     QStringList getFiles(QString dir, QStringList filter = QStringList());
     QStringList getItemClasses() const;
 
+    bool buildPost(BaseItem* parent, QJsonObject&);
+
   protected:
     QString dir;
     QString dirImg;
     QStringList getClasses () const;
+    QStringList getClasses (QString type) const;
     QString GetRandomString(QString fileName, const int randomStringLength = 4);
     QString htmlHeader();
     QString htmlfooter();
@@ -38,7 +40,7 @@ class Site
     QString getDiv(QString className);
     QString getTplHtml();
     QString navbar(QString name, QString &page, QList<QString> pages, QMap<QString,QString> &list);
-    bool buildPost(BaseItem* parent, QJsonObject&);
+    QJsonObject jsonPostConfig;
 
 
   private:

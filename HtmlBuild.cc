@@ -127,19 +127,6 @@ void HtmlBuild::loadFile()
           QJsonObject jsonPost = jsonPosts[j].toObject();
           buildPost(pageItem, jsonPost);
         }
-//      QJsonObject postData;
-//      QJsonArray pics;
-//      pics.append("/img/v3.png");
-//      pics.append("/img/v3.png");
-//      postData["class"] = "right";
-//      postData["ctx"] = "<p>новая</p>";
-//      postData["id"] = "PostPics";
-//      postData["imgs"] = pics;
-
-//      pageItem->appendChild(new PostPics(this, postData));
-
-////      PostPicsEdit *edit = new PostPicsEdit(this, QStringList () << "/img/v3.png");
-////      edit->show();
 
       header->appendChild(pageItem);
     }

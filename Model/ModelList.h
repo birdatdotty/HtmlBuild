@@ -40,12 +40,16 @@ public:
     void newPost(int curRow, PageItem* pageItem, AbstractPostItem *post);
     void newPage();
 
+    void startUpdate(PageItem* pageItem, int curRow);
+    void endUpdate();
+
 
 private:
     BaseItem *getItem(const QModelIndex &index) const;
 
     BaseItem *rootItem;
     Site* site;
+    bool emty = false;
 };
 //! [2]
 

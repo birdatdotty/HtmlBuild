@@ -23,7 +23,3 @@ QString HeaderItem::getHtml() {
   return "";
 }
 
-QWidget *HeaderItem::createEditor(const QModelIndex &,int)
-{
-  return new QWidget();
-}

@@ -23,7 +23,6 @@ class PostPics : public AbstractPostItem
     QString getTitle() const;
 
     void setCtx(QString);
-    void setShortCtx(QString);
     void setClass(QString);
     void setId(QString);
     void setImg(QString);
@@ -38,7 +37,6 @@ class PostPics : public AbstractPostItem
 
 
     QJsonObject json();
-    QJsonObject getNewObject();
 
   private:
     PostPics* self;
@@ -48,8 +46,12 @@ class PostPics : public AbstractPostItem
             stClass,
             stTitle,
             img;
-    QList<QString> pics;
+    QStringList pics;
     QString type = "pics";
+
+  private slots:
+    void changeImgList(QStringList);
+    void chageStClass(const QString& text);
 };
 
 AbstractPostItem *createPostPicsItem(Site *site, QJsonObject item);

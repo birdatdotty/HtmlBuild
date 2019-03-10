@@ -148,27 +148,53 @@ void ModelList::newPost(int curRow, PageItem* pageItem, AbstractPostItem *post)
 
 void ModelList::newPage()
 {
-//  qInfo() << "void ModelList::newPage()";
-//  int len = rootItem->childCount();
-//  QJsonObject page;
-//  page["page"] = "page.html";
-//  page["name"] = "page.html";
-//  page["title"] = "Title";
+  qInfo() << "void ModelList::newPage()";
+  int len = rootItem->childCount();
+  QJsonObject jsonPage;
+  jsonPage["page"] = "page.html";
+  jsonPage["name"] = "page.html";
+  jsonPage["title"] = "Title";
 
-//  QJsonObject post;
-//  post["id"] = "new";
-//  post["ctx"] = "пустой пост";
-//  post["shortCtx"] = "blank";
-//  post["class"] = "center";
-//  post["title"] = "новый пост";
+//  QJsonObject jsonPost;
+//  jsonPost["id"] = "new";
+//  jsonPost["ctx"] = "пустой пост";
+//  jsonPost["shortCtx"] = "blank";
+//  jsonPost["class"] = "center";
+//  jsonPost["title"] = "новый пост";
 
 
-//  PageItem *pageItem = new PageItem(site, page);
+  PageItem *pageItem = new PageItem(site, jsonPage);
+//  site->buildPost(pageItem, jsonPost);
 //  AbstractPostItem *blankPost = new PostItem(site, post);//"ds", "пустой пост", "blank", "", "center");
 //  pageItem->appendChild(blankPost);
+//  PageItem *pageItem = new PageItem(this, jsonPage);
 
-//  beginInsertRows(QModelIndex(), len, len + 1);
-//  rootItem->appendChild(pageItem);
-//  endInsertRows();
 
+  beginInsertRows(QModelIndex(), len, len + 1);
+  rootItem->appendChild(pageItem);
+  endInsertRows();
+
+}
+
+void ModelList::startUpdate(PageItem* pageItem, int curRow)
+{
+  int len = pageItem->childCount();
+  qInfo() << len;
+  if (len == 0)
+    emty = true;
+
+  if (emty)
+    beginResetModel();
+
+  beginInsertRows(index(curRow,0), len, len + 1);
+}
+
+void ModelList::endUpdate()
+{
+  endInsertRows();
+  if (emty)
+    {
+      emty = false;
+      endResetModel();
+    }
 }

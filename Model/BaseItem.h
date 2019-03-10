@@ -33,7 +33,6 @@ class BaseItem : public QObject
     virtual bool setData(int column, const QVariant &value) = 0;
 
     virtual QString getHtml() = 0;
-    virtual QWidget* createEditor (const QModelIndex &index,int) = 0;
     virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
 
@@ -50,6 +49,8 @@ class BaseItem : public QObject
     QPushButton *settings;
 
     void draw(QPainter *painter, const QStyleOptionViewItem &option, QString text) const;
+    void drawButton(QPainter *painter, const QStyleOptionViewItem &option, QString text) const;
+
 
 
 };

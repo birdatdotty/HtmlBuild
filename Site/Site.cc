@@ -19,11 +19,8 @@ Site::Site(QString dir)
   : dir(dir),
     dirImg(dir+"/img/")
 {
-  const Site* site = this;
-
   genPost.insert("default", createPostItem);
   genPost.insert("pics", createPostPicsItem);
-//  newPosts["default"] =
 
   updateConfig();
 }
@@ -49,23 +46,14 @@ void Site::updateConfig()
           classes << key;
           divs[key] = jsonDivs[key].toString();
         }
+      jsonPostConfig = data["posts"].toObject();
     }
 }
-
-Site::Site(Site *parent)
-  : dir(parent->dir),
-    dirImg(parent->dirImg),
-    classes(parent->classes),
-    stHtmlHeader(parent->stHtmlHeader),
-    stHtmlFooter(parent->stHtmlFooter),
-    tplHtml(parent->tplHtml),
-    divs(parent->divs),
-    genPost(parent->genPost)
-{}
 
 Site::Site(const Site *parent)
   : dir(parent->dir),
     dirImg(parent->dirImg),
+    jsonPostConfig(parent->jsonPostConfig),
     classes(parent->classes),
     stHtmlHeader(parent->stHtmlHeader),
     stHtmlFooter(parent->stHtmlFooter),
@@ -80,7 +68,6 @@ QStringList Site::getFiles(QString d, QStringList filter)
   QDir selectDir(dir);
   selectDir.cd(d);
   QString stDir = dir + "/" + d + "/";
-//  dirImg
 
   foreach (QString file, selectDir.entryList(filter))
     files.append("/" + d + "/" + file);
@@ -98,6 +85,18 @@ QStringList Site::getItemClasses() const
 
 QStringList Site::getClasses() const
 {
+  return classes;
+}
+
+QStringList Site::getClasses(QString type) const
+{
+  QStringList classes;
+  QJsonArray jsonClasses = jsonPostConfig["classes"].toObject()[type].toArray();
+  for (int o = 0; o < jsonClasses.size(); o++)
+    {
+      classes.append(jsonClasses[o].toString());
+    }
+
   return classes;
 }
 
@@ -180,6 +179,9 @@ QString Site::navbar(QString name, QString &page, QList<QString> pages, QMap<QSt
 bool Site::buildPost(BaseItem* parent, QJsonObject &item)
 {
   QString type = item["type"].toString();
+  if (item["id"].isNull())
+    item["id"] = "new";
+
   if (genPost.contains(type))
     {
       AbstractPostItem* child = genPost[type](this,item);

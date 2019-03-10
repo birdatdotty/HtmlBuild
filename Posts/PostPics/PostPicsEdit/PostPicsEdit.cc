@@ -5,9 +5,10 @@
 PostPicsEdit::PostPicsEdit(const Site* site, QStringList list)
   : Site(site),
     label(new QLabel("Картинки:")),
-    btnAddImg(new QPushButton("Добавить"))
+    btnAddImg(new QPushButton("Добавить")),
+    btnOk(new QPushButton("OK"))
 {
-  picsLayout.addWidget(label,0,1);
+  picsLayout.addWidget(label,0,0);
   picsLayout.addWidget(new QWidget(), 0, 5);
 
   foreach(QString url, list)
@@ -19,7 +20,9 @@ PostPicsEdit::PostPicsEdit(const Site* site, QStringList list)
 
   mainLayout.addLayout(&picsLayout);
   mainLayout.addWidget(btnAddImg);
+  mainLayout.addWidget(btnOk);
   connect(btnAddImg, &QPushButton::released, this, &PostPicsEdit::addImg);
+  connect(btnOk, &QPushButton::released, this, &PostPicsEdit::applyImgs);
 
   setLayout(&mainLayout);
 }
@@ -38,4 +41,14 @@ void PostPicsEdit::addImg()
   imgs.append(addImg);
   picsLayout.addWidget(addImg);
 
+}
+
+void PostPicsEdit::applyImgs()
+{
+  QStringList listImgs;
+  for (AddImg* img: imgs)
+    listImgs.append(img->getSrc());
+
+  updateImgList(listImgs);
+  close();
 }

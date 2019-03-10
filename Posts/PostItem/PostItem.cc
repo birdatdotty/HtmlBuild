@@ -2,11 +2,10 @@
 #include "PostEdit/PostWindow.h"
 #include "../../Site/Site.h"
 
-//#include "PageEdit/PageEdit.h"
-
 #include <QPair>
 #include <QTime>
-#include <QDebug>
+#include <QComboBox>
+
 
 PostItem::PostItem(const Site *site, QJsonObject item)
   : AbstractPostItem(site, item),
@@ -17,10 +16,6 @@ PostItem::PostItem(const Site *site, QJsonObject item)
     stTitle(item["title"].toString("")),
     img(item["img"].toString(""))
 {
-  qInfo() << "PostItem:" << item;
-  qInfo() << "class1" << stClass;
-  qInfo() << "class2" << item["class"].toString("center");
-  qInfo() << item["class"].toString("center");
   self = this;
 }
 
@@ -35,41 +30,20 @@ QVariant PostItem::data(int column) const
     case 0: return stId;
     case 1:
       return QVariant::fromValue(self);
-//    case 2: return QVariant::fromValue(qMakePair(self,stClass));
     case 2:
       return QVariant::fromValue(self);
     case 3:
       return QVariant::fromValue(self);
-//      return QVariant::fromValue(qMakePair(self,3));
-    default: return QVariant();
   }
-}
 
-#include <QDebug>
-QVariant PostItem::getShortData(int column) const
-{
-  switch (column) {
-    case 0: return stId;
-    case 1:
-      return stShortCtx;
-    case 2:
-      {
-        qInfo() << 2 << stClass;
-        return stClass;
-      }
-    case 3:
-      return QVariant::fromValue(qMakePair(self,3));
-    default: return QVariant();
-  }
+  return QVariant();
 }
-
 
 bool PostItem::setData(int column, const QVariant &value)
 {
   switch (column) {
     case 0: stId = value.toString(); return true;
     case 1: stCtx = value.toString(); return true;
-    case 2: stClass = value.toString(); return true;
     default: return false;
   }
 }
@@ -129,27 +103,24 @@ void PostItem::setTitle(QString title)
   stTitle = title;
 }
 
-QWidget *PostItem::createEditor(const QModelIndex &, int column)
-{
-  if (column == 3)
-    {
-      const QStringList classes = getClasses();
-
-      PostWindow *postWindow = new PostWindow(self, self, classes);
-      return postWindow;
-    }
-
-
-  return new QWidget();
-}
+//#include <QLabel>
 
 QWidget *PostItem::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
   int column = index.column();
+  const QStringList classes = getClasses(type);
+  if (column == 2)
+    {
+      QComboBox* editor = new QComboBox(parent);
+      editor->addItems(classes);
+      editor->setCurrentText(stClass);
+      connect(editor, &QComboBox::currentTextChanged, this, &PostItem::chageStClass);
+
+      return editor;
+    }
+
   if ((column == 3) || (column == 1))
     {
-      const QStringList classes = getClasses();
-
       PostWindow *postWindow = new PostWindow(self, self, classes);
       return postWindow;
     }
@@ -165,6 +136,8 @@ void PostItem::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
     BaseItem::draw(painter, option, stShortCtx);
   if (column == 2)
     BaseItem::draw(painter, option, stClass);
+  if (column == 3)
+    drawButton(painter, option, "Настройки");
 }
 
 
@@ -183,16 +156,9 @@ QJsonObject PostItem::json()
   return data;
 }
 
-QJsonObject PostItem::getNewObject()
+void PostItem::chageStClass(const QString &text)
 {
-//  {"shortCtx":"уrrrr","title":"eeeeER","type":"default"}
-  QJsonObject newObject;
-  newObject["type"] = type;
-  newObject["class"] = "center";
-  newObject["ctx"] = "";
-  newObject["id"] = "post" + QString::number(QTime::currentTime().second());
-
-  return newObject;
+  stClass = text;
 }
 
 
@@ -200,9 +166,8 @@ AbstractPostItem *createPostItem(Site *site, QJsonObject item)
 {
   if (item.isEmpty())
     {
-      QJsonObject newObject;
-      item["class"] = "center";
-      item["ctx"] = "";
+      item["class"] = "pics";
+      item["ctx"] = "<p>Пустой блок</p>";
       item["id"] = "post" + QString::number(QTime::currentTime().second());
     }
 

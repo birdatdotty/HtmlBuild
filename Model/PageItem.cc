@@ -13,7 +13,7 @@ PageItem::PageItem(Site *site, QJsonObject item)
     stName(item["name"].toString()),
     stTitle(item["title"].toString())
 {
-
+  self = this;
 }
 
 int PageItem::columnCount() const
@@ -28,7 +28,7 @@ QVariant PageItem::data(int column) const
     case 1: return stName;
     case 2: return stTitle;
     case 3:
-      return QVariant::fromValue(qMakePair(self,3));
+      return QVariant::fromValue(self);//QVariant::fromValue(qMakePair(self,3));
     default: return QVariant();
   }
 }
@@ -95,27 +95,6 @@ void PageItem::addNewChild()
 {
 }
 
-QWidget *PageItem::createEditor (const QModelIndex &index, int column)
-{
-  QStringList classes = getClasses();
-//  if (column == 2)
-//    {
-//      QPair<PostItem*,QString> data = qvariant_cast<QPair<PostItem*,QString>>(item);
-//      QComboBox* editor = new QComboBox(parent);
-
-//      editor->addItems(classes);
-//      editor->setCurrentText(data.second);
-
-//      return editor;
-//    }
-  if (column == 3)
-    {
-      PageEdit *pageEdit = new PageEdit(this, index, self);
-      return pageEdit;
-    }
-
-  return new QWidget();
-}
 
 QWidget *PageItem::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -128,7 +107,7 @@ QWidget *PageItem::createEditor(QWidget *parent, const QStyleOptionViewItem &opt
       return pageEdit;
     }
 
-  return new QWidget;
+  return new QWidget(parent);
 }
 
 void PageItem::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -140,6 +119,9 @@ void PageItem::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
       painter->drawText(option.rect, "stTitle");
       return;
     }
+//  if (column == 3)
+//    drawButton(painter, option, "Настройки");
+
 
 }
 

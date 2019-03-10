@@ -14,8 +14,6 @@ public:
   virtual void paint(QPainter *painter,
                      const QStyleOptionViewItem &option,
                      const QModelIndex &index) const = 0;
-
-  virtual QJsonObject getNewObject() = 0;
 };
 
 #endif // ABSTRACTPOSTITEM_H

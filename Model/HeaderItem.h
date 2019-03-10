@@ -13,7 +13,6 @@ class HeaderItem : public BaseItem
     bool setData(int column, const QVariant &value);
 
     QString getHtml();
-    QWidget* createEditor (const QModelIndex &,int);
 
   private:
     QStringList list;

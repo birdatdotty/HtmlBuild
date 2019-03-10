@@ -14,6 +14,7 @@
 class PostPicsEdit : public QWidget,
     public Site
 {
+  Q_OBJECT
 public:
   PostPicsEdit(const Site* site, QStringList pics);
   ~PostPicsEdit();
@@ -26,11 +27,17 @@ private:
 
 
   QLabel *label;
-  QPushButton *btnAddImg;
+  QPushButton *btnAddImg,
+              *btnOk;
+
+  QString type = "testPostPics";
 
 private slots:
   void addImg();
-  QString type = "testPostPics";
+  void applyImgs();
+
+signals:
+  void updateImgList(QStringList);
 };
 
 #endif // POSTPICSEDIT_H

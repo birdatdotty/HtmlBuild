@@ -4,14 +4,16 @@
 //#include "../PageEdit/PageEdit.h"
 
 #include <QPair>
+#include <QComboBox>
 #include <QTime>
+
 
 PostPics::PostPics(const Site *site, QJsonObject item)
   : AbstractPostItem(site, item),
     stId(item["id"].toString("")),
     stCtx(item["ctx"].toString("")),
     stShortCtx(item["shortCtx"].toString("")),
-    stClass(item["class"].toString("")),
+    stClass(item["class"].toString("pics")),
     stTitle(item["title"].toString("")),
     img(item["img"].toString(""))
 {
@@ -34,31 +36,15 @@ QVariant PostPics::data(int column) const
   switch (column) {
     case 0: return stId;
     case 1:
-//      return QVariant::fromValue(this);
-//      return this;
-//      return QVariant::fromValue(self);
-      return QVariant::fromValue(qMakePair(self,1));
-//    case 1: return stCtx;
-    case 2: return QVariant::fromValue(qMakePair(self,stClass));
+      return QVariant::fromValue(self);
+    case 2:
+      return QVariant::fromValue(self);
     case 3:
-      return QVariant::fromValue(qMakePair(self,3));
+      return QVariant::fromValue(self);
+
     default: return QVariant();
   }
 }
-
-QVariant PostPics::getShortData(int column) const
-{
-  switch (column) {
-    case 0: return stId;
-    case 1:
-      return stShortCtx;
-    case 2: return stClass;
-    case 3:
-      return QVariant::fromValue(qMakePair(self,3));
-    default: return QVariant();
-  }
-}
-
 
 bool PostPics::setData(int column, const QVariant &value)
 {
@@ -75,14 +61,16 @@ QString PostPics::getHtml()
   QString tpl_html, html;
 
   QString tmpCtx = stCtx;
-  if (stTitle.size()>0)
-    tmpCtx = "<h3>" + stTitle + "</h3>" + stCtx;
+  if (pics.size() == 0)
+    return html;
 
-  tpl_html = getDiv(stClass);
-  if (img.size() == 0)
-    html = tpl_html.arg(stId, tmpCtx, "");
-  else
-    html = tpl_html.arg(stId, tmpCtx, "<div><img alt='' src='" + img + "'></div>");
+  html = "<div class="+stClass+">";
+  for (int i = 0; i < pics.size(); i++)
+    {
+      html += "<img alt='' src='" + pics[i] + "'>";
+    };
+  html += "</div>";
+
   return html;
 }
 
@@ -94,7 +82,6 @@ QString PostPics::getImg() const { return img; }
 QString PostPics::getTitle() const { return stTitle; }
 
 void PostPics::setCtx(QString str) {stCtx = str;}
-void PostPics::setShortCtx(QString str) {stShortCtx = str;}
 void PostPics::setClass(QString str) {stClass = str;}
 void PostPics::setId(QString str) {stId = str;}
 void PostPics::setImg(QString str) {img = str;}
@@ -104,26 +91,25 @@ void PostPics::setTitle(QString title)
   stTitle = title;
 }
 
-QWidget *PostPics::createEditor(const QModelIndex &, int column)
-{
-//  qInfo() << "QWidget *PostPics::createEditor(const QModelIndex &, int column)";
-//  if (column == 3)
-//    {
-//      PostPicsEdit *edit = new PostPicsEdit(this, pics);
-//      return edit;
-//    }
-
-
-  return new QWidget();
-}
-
 QWidget *PostPics::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
   int column = index.column();
-  if (column == 3)
+  const QStringList classes = getClasses(type);
+  if (column == 2)
+    {
+      QComboBox* editor = new QComboBox(parent);
+      editor->addItems(classes);
+      editor->setCurrentText(stClass);
+      connect(editor, &QComboBox::currentTextChanged, this, &PostPics::chageStClass);
+
+      return editor;
+    }
+
+  if ((column == 3) || (column == 1))
     {
       const Site* site = dynamic_cast<const Site*>(this);
       PostPicsEdit *edit = new PostPicsEdit(site, pics);
+      connect(edit, &PostPicsEdit::updateImgList, this, &PostPics::changeImgList);
       return edit;
     }
 
@@ -133,7 +119,39 @@ QWidget *PostPics::createEditor(QWidget *parent, const QStyleOptionViewItem &opt
 
 void PostPics::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-
+  int column = index.column();
+//  if (column == 0)
+//    {
+//      BaseItem::draw(painter, option, stId);
+//      return;
+//    }
+  if (column == 1)
+    {
+      int num = pics.size();
+      switch (num) {
+        case 0:
+          BaseItem::draw(painter, option, "пусто");
+          return;
+        case 1:
+          BaseItem::draw(painter, option, pics[0]);
+          return;
+        default:
+          BaseItem::draw(painter, option, QString::number(num) + " картин(ок/ки)");
+          return;
+      }
+      BaseItem::draw(painter, option, stShortCtx);
+      return;
+    }
+  if (column == 2)
+    {
+      BaseItem::draw(painter, option, stClass);
+      return;
+    }
+  if (column == 3)
+    {
+      drawButton(painter, option, "Настройки");
+      return;
+    }
 }
 
 QJsonObject PostPics::json()
@@ -143,45 +161,35 @@ QJsonObject PostPics::json()
   foreach (QString file, pics)
     imgList.push_back(file);
 
-//  data["id"] = stId;
-//  data["ctx"] = stCtx;
-//  data["shortCtx"] = stShortCtx;
-//  data["class"] = stClass;
+  data["id"] = stId;
   if (pics.size()>0)
     data["imgs"] = imgList;
+
+  data["class"] = stClass;
   data["type"] = type;
-//  data["title"] = stTitle;
 
   return data;
-
-//  QJsonObject data;
-//  data["id"] = stId;
-//  data["ctx"] = stCtx;
-//  data["shortCtx"] = stShortCtx;
-//  data["class"] = stClass;
-//  if (img.size()>0)
-//    data["img"] = img;
-//  data["type"] = type;
-//  data["title"] = stTitle;
-
-  //  return data;
 }
 
-QJsonObject PostPics::getNewObject()
+void PostPics::changeImgList(QStringList list)
 {
-  QJsonObject newObject;
-  newObject["type"] = type;
-  newObject["id"] = "post" + QString::number(QTime::currentTime().second());
+  pics = list;
+}
 
-  return newObject;
+void PostPics::chageStClass(const QString &text)
+{
+  stClass = text;
 }
 
 AbstractPostItem *createPostPicsItem(Site *site, QJsonObject item)
 {
   if (item.isEmpty())
     {
-      item["id"] = "post" + QString::number(QTime::currentTime().second());
+      item["class"] = "pics";
+      item["id"] = "pics" + QString::number(QTime::currentTime().second());
     }
 
-  return new PostPics(site, item);
+  PostPics* postPics = new PostPics(site, item);
+
+  return postPics;
 }

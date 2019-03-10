@@ -28,7 +28,6 @@ class PageItem : public BaseItem,
     void setTitle(QString);
 
     void addNewChild();
-    QWidget* createEditor (const QModelIndex &index, int column);
     QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
 
