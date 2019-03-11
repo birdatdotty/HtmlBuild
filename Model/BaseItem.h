@@ -13,11 +13,14 @@
 #include <QStyledItemDelegate>
 
 
-class BaseItem : public QObject
+#include "../Site/Site.h"
+
+class BaseItem : public QObject,
+                 public Site
 {
   Q_OBJECT
   public:
-    explicit BaseItem();
+    explicit BaseItem(const Site*);
     ~BaseItem();
 
     BaseItem *child(int number);
@@ -38,6 +41,9 @@ class BaseItem : public QObject
 
 
     virtual QJsonObject json();
+    virtual void paint(QPainter *painter,
+                       const QStyleOptionViewItem &option,
+                       const QModelIndex &index) const = 0;
 
   signals:
 

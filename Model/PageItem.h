@@ -6,8 +6,7 @@
 
 #include <QStyledItemDelegate>
 
-class PageItem : public BaseItem,
-                 public Site
+class PageItem : public BaseItem
 {
   public:
     PageItem(Site*site, QJsonObject item);

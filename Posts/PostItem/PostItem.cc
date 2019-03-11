@@ -8,7 +8,7 @@
 
 
 PostItem::PostItem(const Site *site, QJsonObject item)
-  : AbstractPostItem(site, item),
+  : BaseItem(site),
     stId(item["id"].toString("")),
     stCtx(item["ctx"].toString("")),
     stShortCtx(item["shortCtx"].toString("")),
@@ -105,7 +105,7 @@ void PostItem::setTitle(QString title)
 
 //#include <QLabel>
 
-QWidget *PostItem::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *PostItem::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
 {
   int column = index.column();
   const QStringList classes = getClasses(type);
@@ -137,7 +137,7 @@ void PostItem::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
   if (column == 2)
     BaseItem::draw(painter, option, stClass);
   if (column == 3)
-    drawButton(painter, option, "Настройки");
+    draw(painter, option, "Настройки...");
 }
 
 
@@ -162,7 +162,7 @@ void PostItem::chageStClass(const QString &text)
 }
 
 
-AbstractPostItem *createPostItem(Site *site, QJsonObject item)
+BaseItem *createPostItem(Site *site, QJsonObject item)
 {
   if (item.isEmpty())
     {

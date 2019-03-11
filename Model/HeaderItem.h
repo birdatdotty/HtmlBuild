@@ -6,7 +6,7 @@
 class HeaderItem : public BaseItem
 {
   public:
-    HeaderItem(QStringList data);
+    HeaderItem(QStringList data, const Site* site);
 
     int columnCount() const;
     QVariant data(int column) const;
@@ -14,6 +14,9 @@ class HeaderItem : public BaseItem
 
     QString getHtml();
 
+    virtual void paint(QPainter *painter,
+                       const QStyleOptionViewItem &option,
+                       const QModelIndex &index) const;
   private:
     QStringList list;
 };

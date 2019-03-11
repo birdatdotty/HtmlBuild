@@ -10,12 +10,10 @@
 #include <QJsonObject>
 
 
-
-class AbstractPostItem;
 class BaseItem;
 class Site;
 
-typedef  AbstractPostItem*(*makePost)(Site*,QJsonObject);
+typedef  BaseItem*(*makePost)(Site*,QJsonObject);
 
 class Site
 {

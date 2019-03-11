@@ -4,7 +4,8 @@
 #include <QPainter>
 #include <QApplication>
 
-BaseItem::BaseItem()
+BaseItem::BaseItem(const Site* site)
+  : Site(site)
 {
   settings = new QPushButton();
 }
@@ -43,7 +44,7 @@ bool BaseItem::appendChild(BaseItem* child) {
   return true;
 }
 
-QWidget *BaseItem::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *BaseItem::createEditor(QWidget */*parent*/, const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
 {
   return new QWidget();
 }

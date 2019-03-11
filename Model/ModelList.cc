@@ -137,38 +137,15 @@ bool ModelList::setHeaderData(int section, Qt::Orientation orientation,
     return result;
 }
 
-void ModelList::newPost(int curRow, PageItem* pageItem, AbstractPostItem *post)
-{
-//  int len = pageItem->childCount();
-
-//  beginInsertRows(index(curRow,0), len, len + 1);
-//  pageItem->appendChild(post);
-//  endInsertRows();
-}
-
 void ModelList::newPage()
 {
-  qInfo() << "void ModelList::newPage()";
   int len = rootItem->childCount();
   QJsonObject jsonPage;
   jsonPage["page"] = "page.html";
   jsonPage["name"] = "page.html";
   jsonPage["title"] = "Title";
 
-//  QJsonObject jsonPost;
-//  jsonPost["id"] = "new";
-//  jsonPost["ctx"] = "пустой пост";
-//  jsonPost["shortCtx"] = "blank";
-//  jsonPost["class"] = "center";
-//  jsonPost["title"] = "новый пост";
-
-
   PageItem *pageItem = new PageItem(site, jsonPage);
-//  site->buildPost(pageItem, jsonPost);
-//  AbstractPostItem *blankPost = new PostItem(site, post);//"ds", "пустой пост", "blank", "", "center");
-//  pageItem->appendChild(blankPost);
-//  PageItem *pageItem = new PageItem(this, jsonPage);
-
 
   beginInsertRows(QModelIndex(), len, len + 1);
   rootItem->appendChild(pageItem);

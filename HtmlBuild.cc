@@ -1,6 +1,6 @@
 #include "HtmlBuild.h"
 #include "Model/Item.h"
-#include "Model/Model.h"
+#include "Model/ModelList.h"
 #include "Db.h"
 #include "Model/Page/Page.h"
 
@@ -114,7 +114,7 @@ void HtmlBuild::loadFile()
 
 
   QJsonObject data = QJsonDocument().fromJson(dataJson.toUtf8()).object();
-  header = new HeaderItem(QStringList() << "Страница/id" << "Название/ctx" << "Заголовок/class" << "Параметры");
+  header = new HeaderItem(QStringList() << "Страница/id" << "Название/ctx" << "Заголовок/class" << "Параметры", this);
   QJsonArray pagesCtx = data["pagesCtx"].toArray();
   for(int i = 0; i < pagesCtx.size(); i++)
     {

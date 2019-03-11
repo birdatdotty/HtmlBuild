@@ -1,9 +1,9 @@
 #ifndef POSTPICS_H
 #define POSTPICS_H
 
-#include "../../Model/AbstractPostItem.h"
+#include "../../Model/BaseItem.h"
 
-class PostPics : public AbstractPostItem
+class PostPics : public BaseItem
 {
   public:
 //    PostItem(const Site* site, QString stId, QString stCtx, QString stShortCtx, QString stClass, QString title, QString img = "");
@@ -54,6 +54,6 @@ class PostPics : public AbstractPostItem
     void chageStClass(const QString& text);
 };
 
-AbstractPostItem *createPostPicsItem(Site *site, QJsonObject item);
+BaseItem *createPostPicsItem(Site *site, QJsonObject item);
 
 #endif // POSTITEM_H

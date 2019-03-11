@@ -9,7 +9,7 @@
 
 
 PostPics::PostPics(const Site *site, QJsonObject item)
-  : AbstractPostItem(site, item),
+  : BaseItem(site),
     stId(item["id"].toString("")),
     stCtx(item["ctx"].toString("")),
     stShortCtx(item["shortCtx"].toString("")),
@@ -91,7 +91,7 @@ void PostPics::setTitle(QString title)
   stTitle = title;
 }
 
-QWidget *PostPics::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *PostPics::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
 {
   int column = index.column();
   const QStringList classes = getClasses(type);
@@ -120,11 +120,6 @@ QWidget *PostPics::createEditor(QWidget *parent, const QStyleOptionViewItem &opt
 void PostPics::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
   int column = index.column();
-//  if (column == 0)
-//    {
-//      BaseItem::draw(painter, option, stId);
-//      return;
-//    }
   if (column == 1)
     {
       int num = pics.size();
@@ -139,8 +134,6 @@ void PostPics::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
           BaseItem::draw(painter, option, QString::number(num) + " картин(ок/ки)");
           return;
       }
-      BaseItem::draw(painter, option, stShortCtx);
-      return;
     }
   if (column == 2)
     {
@@ -149,7 +142,7 @@ void PostPics::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
     }
   if (column == 3)
     {
-      drawButton(painter, option, "Настройки");
+      draw(painter, option, "Настройки...");
       return;
     }
 }
@@ -181,7 +174,7 @@ void PostPics::chageStClass(const QString &text)
   stClass = text;
 }
 
-AbstractPostItem *createPostPicsItem(Site *site, QJsonObject item)
+BaseItem *createPostPicsItem(Site *site, QJsonObject item)
 {
   if (item.isEmpty())
     {

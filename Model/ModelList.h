@@ -37,7 +37,6 @@ public:
     bool setHeaderData(int section, Qt::Orientation orientation,
                        const QVariant &value, int role = Qt::EditRole) override;
 
-    void newPost(int curRow, PageItem* pageItem, AbstractPostItem *post);
     void newPage();
 
     void startUpdate(PageItem* pageItem, int curRow);

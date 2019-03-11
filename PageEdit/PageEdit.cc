@@ -45,11 +45,6 @@ PageEdit::PageEdit(const Site *site, const QModelIndex &index0, PageItem* pageIt
   connect(bOk, &QPushButton::released, this, &PageEdit::clkOk);
   connect(bCancel, &QPushButton::released, this, &QWidget::close);
 
-  connect(selectPost, &QComboBox::currentTextChanged, [=](QString txt){
-
-//      qInfo() << selectPost->
-    });
-
   setLayout(&mainLayout);
 }
 

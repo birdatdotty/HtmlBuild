@@ -1,9 +1,9 @@
 #ifndef POSTITEM_H
 #define POSTITEM_H
 
-#include "../../Model/AbstractPostItem.h"
+#include "../../Model/BaseItem.h"
 
-class PostItem : public AbstractPostItem
+class PostItem : public BaseItem
 {
   public:
     PostItem(const Site* site, QJsonObject item);
@@ -51,6 +51,6 @@ class PostItem : public AbstractPostItem
     void chageStClass(const QString &text);
 };
 
-AbstractPostItem* createPostItem(Site* site,QJsonObject item = QJsonObject());
+BaseItem* createPostItem(Site* site,QJsonObject item = QJsonObject());
 
 #endif // POSTITEM_H

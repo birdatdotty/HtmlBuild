@@ -1,7 +1,8 @@
 #include "HeaderItem.h"
 
-HeaderItem::HeaderItem(QStringList data)
-  : list(data)
+HeaderItem::HeaderItem(QStringList data, const Site* site)
+  : BaseItem(site),
+    list(data)
 {}
 
 int HeaderItem::columnCount() const
@@ -21,5 +22,10 @@ bool HeaderItem::setData(int column, const QVariant &value)
 
 QString HeaderItem::getHtml() {
   return "";
+}
+
+void HeaderItem::paint(QPainter */*painter*/, const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
+{
+
 }
 

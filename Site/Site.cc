@@ -184,7 +184,7 @@ bool Site::buildPost(BaseItem* parent, QJsonObject &item)
 
   if (genPost.contains(type))
     {
-      AbstractPostItem* child = genPost[type](this,item);
+      BaseItem* child = genPost[type](this,item);
       parent->appendChild(child);
       return true;
 

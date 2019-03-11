@@ -8,7 +8,7 @@
 
 
 PageItem::PageItem(Site *site, QJsonObject item)
-  : Site(site),
+  : BaseItem(site),
     stPage(item["page"].toString()),
     stName(item["name"].toString()),
     stTitle(item["title"].toString())
@@ -96,7 +96,7 @@ void PageItem::addNewChild()
 }
 
 
-QWidget *PageItem::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *PageItem::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
 {
   int column = index.column();
   if (column == 3)
@@ -119,8 +119,8 @@ void PageItem::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
       painter->drawText(option.rect, "stTitle");
       return;
     }
-//  if (column == 3)
-//    drawButton(painter, option, "Настройки");
+  if (column == 3)
+    draw(painter, option, "Настройки...");
 
 
 }
