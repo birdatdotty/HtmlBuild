@@ -21,3 +21,5 @@ sudo mkdir /var/lib/htmlbuild &&
 sudo chmod -R 777 /var/lib/htmlbuild /var/www/html &&
 cp htmlbuild/config.json /var/lib/htmlbuild &&
 ./HtmlBuild
+
+Надеюсь данная инструкция позволит ознакомится с проектом
