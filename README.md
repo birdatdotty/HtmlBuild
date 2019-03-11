@@ -9,15 +9,15 @@
 
 Сборка проверялась для linux и windows, но опишу только для linux (это основная моя система):
 # получения и сборка проекта:
-git clone https://github.com/birdatdotty/HtmlBuild.git
-cd HtmlBuild
-mkdir build
-cd build
-qmake ..
+git clone https://github.com/birdatdotty/HtmlBuild.git &&
+cd HtmlBuild &&
+mkdir build &&
+cd build &&
+qmake .. &&
 make
 
 # Подготовка системы для работы программы
-sudo mkdir /var/lib/htmlbuild
-sudo chmod -R 777 /var/lib/htmlbuild /var/www/html
-cp htmlbuild/config.json /var/lib/htmlbuild
+sudo mkdir /var/lib/htmlbuild &&
+sudo chmod -R 777 /var/lib/htmlbuild /var/www/html &&
+cp htmlbuild/config.json /var/lib/htmlbuild &&
 ./HtmlBuild
