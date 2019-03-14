@@ -18,7 +18,7 @@ typedef  BaseItem*(*makePost)(Site*,QJsonObject);
 class Site
 {
   public:
-    Site(QString dir);
+    Site(QString dir, QMap<QString,makePost> genPost);
     Site(const Site*);
 
     QStringList getFiles(QString dir, QStringList filter = QStringList());

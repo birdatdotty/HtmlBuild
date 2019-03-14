@@ -1,6 +1,10 @@
 #include "Site.h"
 
-#include "config.h"
+//#include "config.h"
+#define JSON_PATH "/var/lib/htmlbuild/"
+#define JSON_DATA "data.json"
+#define JSON_CONFIG "config.json"
+
 
 #include <QStringList>
 #include <QDir>
@@ -11,16 +15,17 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "../Posts/posts.h"
+#include "../HtmlBuilder/Posts/posts.h"
 
 #include <functional>
 
-Site::Site(QString dir)
+Site::Site(QString dir, QMap<QString,makePost> genPost)
   : dir(dir),
-    dirImg(dir+"/img/")
+    dirImg(dir+"/img/"),
+    genPost(genPost)
 {
-  genPost.insert("default", createPostItem);
-  genPost.insert("pics", createPostPicsItem);
+//  genPost.insert("default", createPostItem);
+//  genPost.insert("pics", createPostPicsItem);
 
   updateConfig();
 }
@@ -77,8 +82,8 @@ QStringList Site::getFiles(QString d, QStringList filter)
 
 QStringList Site::getItemClasses() const
 {
-  QStringList list;
-  list << "default" << "pics";
+  QStringList list = genPost.keys();
+//  list << "default" << "pics";
 
   return list;
 }
@@ -132,7 +137,7 @@ QString Site::htmlfooter()
 
 QString Site::getName(QString /*page*/)
 {
-  return "Волар";
+  return "Тест";
 }
 
 QString Site::getDiv(QString className)

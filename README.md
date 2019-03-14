@@ -14,12 +14,15 @@ cd HtmlBuild &&
 mkdir build &&
 cd build &&
 qmake .. &&
-make
+make &&
+sudo make install
 
 # Подготовка системы для работы программы
 sudo mkdir /var/lib/htmlbuild &&
 sudo chmod -R 777 /var/lib/htmlbuild /var/www/html &&
+mkdir /var/www/html/{css,img} &&
 cp htmlbuild/config.json /var/lib/htmlbuild &&
-./HtmlBuild
+sudo ldconfig
+HtmlBuilder
 
 Надеюсь данная инструкция позволит ознакомится с проектом
