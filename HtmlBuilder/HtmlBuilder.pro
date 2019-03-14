@@ -42,6 +42,9 @@ include (Posts/Posts.pri)
 
 # Site
 unix:!macx: LIBS += -L../Site/ -lSite
+win32:CONFIG(release, debug|release): LIBS += -L../Site/release/ -lSite
+else:win32:CONFIG(debug, debug|release): LIBS += -L../Site/debug/ -lSite
+
 
 INCLUDEPATH += ../Site
 DEPENDPATH += ../Site
@@ -52,6 +55,9 @@ unix:!macx: PRE_TARGETDEPS += ../Site/libSite.a
 
 ## BaseItem
 unix:!macx: LIBS += -L../BaseItem/ -lBaseItem
+win32:CONFIG(release, debug|release): LIBS += -L../BaseItem/release/ -lBaseItem
+else:win32:CONFIG(debug, debug|release): LIBS += -L../BaseItem/debug/ -lBaseItem
+
 
 INCLUDEPATH += ../BaseItem
 DEPENDPATH += ../BaseItem

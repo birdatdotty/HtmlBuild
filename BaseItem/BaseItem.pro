@@ -12,6 +12,9 @@ HEADERS += \
 
 # Site
 unix:!macx: LIBS += -L../Site/ -lSite
+win32:CONFIG(release, debug|release): LIBS += -L../Site/release/ -lSite
+else:win32:CONFIG(debug, debug|release): LIBS += -L../Site/debug/ -lSite
+
 
 INCLUDEPATH += ../Site
 DEPENDPATH += ../Site
